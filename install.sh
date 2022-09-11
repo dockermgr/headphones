@@ -130,8 +130,8 @@ NGINX_HTTPS="${NGINX_HTTPS:-443}"
 NGINX_PORT="${NGINX_HTTPS:-$NGINX_HTTP}"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Port Setup [ _INT is container port ] [ _EXT is docker ]
-SERVER_PORT_EXT="${SERVER_PORT_EXT:-}"
-SERVER_PORT_INT="${SERVER_PORT_INT:-}"
+SERVER_PORT_EXT="${SERVER_PORT_EXT:-8081}"
+SERVER_PORT_INT="${SERVER_PORT_INT:-8081}"
 SERVER_PORT_ADMIN_EXT="${SERVER_PORT_ADMIN_EXT:-}"
 SERVER_PORT_ADMIN_INT="${SERVER_PORT_ADMIN_INT:-}"
 SERVER_PORT_OTHER_EXT="${SERVER_PORT_OTHER_EXT:-}"
@@ -147,7 +147,7 @@ SERVER_MESSAGE_PASS=""
 SERVER_MESSAGE_POST=""
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # URL to container image [docker pull URL]
-HUB_URL="hello-world"
+HUB_URL="casjaysdevdocker/headphones"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # import global variables
 if [ -f "$APPDIR/env.sh" ] && [ ! -f "$DOCKERMGR_HOME/env/$APPNAME" ]; then
@@ -225,8 +225,10 @@ else
     --restart=always \
     --privileged \
     -e TZ="$SERVER_TIMEZONE" \
-    -v $LOCAL_DATA_DIR:/app/data \
-    -v $LOCAL_CONFIG_DIR:/app/config \
+    -v $HOME/Music:/data/music \
+    -v $HOME/Downloads/music:/data/downloads \
+    -v $LOCAL_DATA_DIR:/data \
+    -v $LOCAL_CONFIG_DIR:/config \
     -p $SERVER_LISTEN:$SERVER_PORT_EXT:$SERVER_PORT_INT \
     "$HUB_URL" &>/dev/null
 fi
@@ -293,3 +295,4 @@ run_exit &>/dev/null
 exit ${exitCode:-$?}
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # end
+
